@@ -25,13 +25,14 @@ const createCurrentUser = async (req: Request, res: Response) => {
     const { auth0Id } = req.body;
     const existingUser = await User.findOne({ auth0Id });
     if (existingUser) {
-      // 注意这里return, 下文不return
+      // 注意这里return
       return res.status(200).send();
     }
     // 记录数据库的方法：新增一条：new and save()
     const newUser = new User(req.body);
     await newUser.save();
     // 201 means created. and then pass back the new user
+    // convert a document to a plain old javascript object
     res.status(201).json(newUser.toObject());
 
   } catch (error) {
@@ -50,6 +51,7 @@ const updateCurrentUser = async (req: Request, res: Response) => {
       // 注意return
       return res.status(404).json({ message: "User not found" })
     }
+    // 不更新auth0Id和email
     user.name = name;
     user.addressLine1 = addressLine1;
     user.city = city;

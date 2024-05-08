@@ -11,6 +11,7 @@ const getMyOrders = async (req: Request, res: Response) => {
   try {
     // add the restaurant and the user to the order object up here
     const orders = await Order.find({ user: req.userId })
+    // 把这些reference信息也返回回来
       .populate("restaurant")
       .populate("user");
     res.json(orders);
@@ -35,6 +36,7 @@ type CheckoutSessionRequest = {
   restaurantId: string;
 }
 
+// webhook和http endpoint没有太大区别，不同点在于它是用来接收第三方系统的事件，
 const stripeWebhookHandler = async (req: Request, res: Response) => {
   console.log("RECEIVED EVENT");
   let event; 
@@ -63,6 +65,7 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
   res.status(200).send();
 };
 
+// 要支付时创建的CheckoutSession，客户端跳转到这个url去支付。
 const createCheckoutSession = async (req: Request, res: Response) => {
   try {
     const checkoutSessionRequest: CheckoutSessionRequest = req.body;
@@ -74,7 +77,7 @@ const createCheckoutSession = async (req: Request, res: Response) => {
     }
 
     const newOrder = new Order({
-      restaurant: restaurant,
+      restaurant: restaurant, // 这里是要填restaurantId, 还是填restaurant，不过数据库里存的是Id
       user: req.userId,
       status: "placed",
       deliveryDetails: checkoutSessionRequest.deliveryDetails,

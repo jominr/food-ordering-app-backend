@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+  // auth0Id: stored in the auth0 databse.
   auth0Id: {
     type: String,
     required: true,

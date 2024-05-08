@@ -26,7 +26,7 @@ const searchRestaurants = async (req: Request, res: Response) => {
 
     let query: any = {};
     
-    // london = London
+    // london = London,
     query["city"] = new RegExp(city, "i");
     // search the Restaurant for the given query
     const cityCheck = await Restaurant.countDocuments(query);
@@ -42,9 +42,12 @@ const searchRestaurants = async (req: Request, res: Response) => {
     }
 
     if (selectedCuisines) {
+      // URL = selectedCuisines=italian,burgers,chinese
+      // [italian, burgers, chinese]
       const cuisinesArray = selectedCuisines
         .split(",")
         .map((cuisine)=>new RegExp(cuisine, "i"));
+      // 三个全满足，才会返回，范围越来越小
       query["cuisines"] = { $all: cuisinesArray };
     }
 
@@ -75,7 +78,7 @@ const searchRestaurants = async (req: Request, res: Response) => {
       pagination: {
         total,
         page,
-        pages: Math.ceil(total / pageSize), // 50 results, pageSize - 10 => pages == 5
+        pages: Math.ceil(total / pageSize), // 50 results, pageSize = 10 => pages == 5
       },
     };
 

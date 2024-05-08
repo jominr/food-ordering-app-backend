@@ -5,8 +5,9 @@ import { jwtCheck, jwtParse } from "../middleware/auth";
 import { validateMyRestaurantRequest } from "../middleware/validation";
 
 const router = express.Router();
-
+ 
 const storage = multer.memoryStorage();
+// 告诉multer如何处理images,
 const upload = multer({
   storage: storage,
   limits: {

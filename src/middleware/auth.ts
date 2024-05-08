@@ -14,6 +14,7 @@ declare global {
 
 }
 // 检查token, Validate Access Token, 401 Unauthorized
+// 参考auth0网站上application->APIs的例子
 export const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
@@ -23,7 +24,7 @@ export const jwtCheck = auth({
 export const jwtParse = async (req: Request, res: Response, next: NextFunction)=> {
   const { authorization } = req.headers;
   
-  if (!authorization || !authorization.startsWith("Bearer")) {
+  if (!authorization || !authorization.startsWith("Bearer ")) {
     return res.sendStatus(401); // not authorized
   }
   // get access token
